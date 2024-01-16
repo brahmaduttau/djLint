@@ -1,12 +1,15 @@
 {% extends "wagtailadmin/generic/chooser/results.html" %}
 {% load i18n wagtailadmin_tags %}
-
-{% block listing_title %}<h2>{% trans "Latest documents" %}</h2>{% endblock %}
-
-{% block no_search_results_message %}
-    <p role="alert">{% blocktrans trimmed %}Sorry, no documents match "<em>{{ search_query }}</em>"{% endblocktrans %}</p>
+{% block listing_title %}
+    <h2>{% trans "Latest documents" %}</h2>
 {% endblock %}
-
+{% block no_search_results_message %}
+    <p role="alert">
+        {% blocktrans trimmed %}
+            Sorry, no documents match "<em>{{ search_query }}</em>"
+        {% endblocktrans %}
+    </p>
+{% endblock %}
 {% block no_items_message %}
     <p>
         {% if is_filtering_by_collection %}

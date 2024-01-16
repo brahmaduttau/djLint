@@ -1,6 +1,5 @@
 {% extends "wagtailadmin/tables/column_header.html" %}
 {% load wagtailadmin_tags i18n %}
-
 {% block after_label %}
     {% with start_index=page_obj.start_index end_index=page_obj.end_index result_count=page_obj.paginator.count %}
         {% if is_searching or is_filtering %}
@@ -15,7 +14,9 @@
                     {% endblocktranslate %}
                 {% endif %}
                 <a href="{{ table.base_url }}{% querystring p=None search_all=None %}">
-                    {% blocktranslate trimmed with title=parent_page.get_admin_display_title %}Search within '{{ title }}'{% endblocktranslate %}
+                    {% blocktranslate trimmed with title=parent_page.get_admin_display_title %}
+                        Search within '{{ title }}'
+                    {% endblocktranslate %}
                 </a>
             {% else %}
                 {% if result_count %}
@@ -27,9 +28,7 @@
                         No results within '{{ title }}'.
                     {% endblocktranslate %}
                 {% endif %}
-                <a href="{{ table.base_url }}{% querystring p=None search_all=1 %}">
-                    {% translate "Search the whole site" %}
-                </a>
+                <a href="{{ table.base_url }}{% querystring p=None search_all=1 %}">{% translate "Search the whole site" %}</a>
             {% endif %}
         {% else %}
             {% blocktranslate trimmed %}

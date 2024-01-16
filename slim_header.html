@@ -32,89 +32,77 @@
                             {% if title %}
                                 {# Accessible page title as the h1 because we do not want #}
                                 {# to put the h1 inside the breadcrumbs #}
-                                <h1 class="w-sr-only">
-                                    {{ title }}
-                                </h1>
+                                <h1 class="w-sr-only">{{ title }}</h1>
                             {% endif %}
                         {% endblock %}
-
                         {% block breadcrumbs %}
                             {% if breadcrumbs_items %}
                                 {% breadcrumbs breadcrumbs_items %}
                             {% endif %}
                         {% endblock %}
-
                         {# Allow actions to be passed as a prerendered variable or defined by extending the template via block_actions #}
-                        {% fragment as block_actions %}{% block actions %}{% endblock %}{% endfragment %}
-                        {% if actions or block_actions %}
-                            {# Actions divider #}
-                            <div class="w-w-px w-h-[30px] w-ml-auto sm:w-ml-0 w-bg-border-furniture"></div>
-                            <div class="w-flex w-items-center w-ml-3">
-                                {% firstof actions block_actions %}
-                            </div>
-                        {% endif %}
-                    {% endblock %}
-                </div>
-            </div>
-
-            {% block search_form %}
-                {% if not search_url %}
-                {% elif search_form or filters %}
-                    <form
-                        action="{{ search_url }}"
-                        method="get"
-                        class="w-slim-header__search-form"
-                        novalidate
-                        role="search"
-                        data-search-form
-                        data-controller="w-swap"
-                        data-action="change->w-swap#submitLazy input->w-swap#submitLazy"
-                        data-w-swap-src-value="{{ search_url }}"
-                        data-w-swap-target-value="#listing-results"
-                    >
-                        {% if search_form %}
-                            {% for field in search_form %}
-                                {% formattedfield field=field sr_only_label=True icon="search" %}
-                            {% endfor %}
-                        {% endif %}
-
-                        {% if filters %}
-                            {% fragment as filters_icon %}{% icon name="sliders" title=_("Show filters") %}{% endfragment %}
-                            {% dialog_toggle classname="w-filter-button" dialog_id="filters-dialog" text=filters_icon %}
-
-                            {% dialog theme="floating" id="filters-dialog" title=_("Filters") dialog_root_selector="[data-search-form]" %}
-                                {% for field in filters.form %}
-                                    {% formattedfield field %}
-                                {% endfor %}
-                            {% enddialog %}
-                        {% endif %}
-
-                        {% comment %}
-                            Add an initial disabled & hidden submit button so that
-                            pressing 'Enter' will not submit form. Reload is not
-                            required as the content is dynamically loaded.
-                        {% endcomment %}
-                        <input hidden disabled type="submit" />
-                    </form>
-                {% endif %}
-            {% endblock %}
-
-            <div class="w-w-full sm:w-w-min w-flex sm:w-flex-nowrap sm:w-flex-row w-items-center w-p-0 sm:w-py-0 sm:w-pr-4 sm:w-justify-end">
-                {% block toggles %}
-                    {% if side_panels %}
-                        {% include "wagtailadmin/shared/side_panel_toggles.html" %}
-                    {% endif %}
-                    {% if history_url %}
-                        {% include "wagtailadmin/shared/headers/_history_icon_link.html" with history_url=history_url nav_icon_button_classes=nav_icon_button_classes nav_icon_classes=nav_icon_classes only %}
+                        {% fragment as block_actions %}
+                        {% block actions %}{% endblock %}
+                    {% endfragment %}
+                    {% if actions or block_actions %}
+                        {# Actions divider #}
+                        <div class="w-w-px w-h-[30px] w-ml-auto sm:w-ml-0 w-bg-border-furniture"></div>
+                        <div class="w-flex w-items-center w-ml-3">{% firstof actions block_actions %}</div>
                     {% endif %}
                 {% endblock %}
             </div>
         </div>
-    </header>
-
-    {% block side_panels %}
-        {% if side_panels %}
-            {% include "wagtailadmin/shared/side_panels.html" %}
+        {% block search_form %}
+            {% if not search_url %}
+            {% elif search_form or filters %}
+                <form action="{{ search_url }}"
+                      method="get"
+                      class="w-slim-header__search-form"
+                      novalidate
+                      role="search"
+                      data-search-form
+                      data-controller="w-swap"
+                      data-action="change->w-swap#submitLazy input->w-swap#submitLazy"
+                      data-w-swap-src-value="{{ search_url }}"
+                      data-w-swap-target-value="#listing-results">
+                    {% if search_form %}
+                        {% for field in search_form %}
+                            {% formattedfield field=field sr_only_label=True icon="search" %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if filters %}
+                        {% fragment as filters_icon %}{% icon name="sliders" title=_("Show filters") %}{% endfragment %}
+                        {% dialog_toggle classname="w-filter-button" dialog_id="filters-dialog" text=filters_icon %}
+                        {% dialog theme="floating" id="filters-dialog" title=_("Filters") dialog_root_selector="[data-search-form]" %}
+                        {% for field in filters.form %}
+                            {% formattedfield field %}
+                        {% endfor %}
+                    {% enddialog %}
+                {% endif %}
+                {% comment %}
+                            Add an initial disabled & hidden submit button so that
+                            pressing 'Enter' will not submit form. Reload is not
+                            required as the content is dynamically loaded.
+                {% endcomment %}
+                <input hidden disabled type="submit" />
+            </form>
         {% endif %}
     {% endblock %}
+    <div class="w-w-full sm:w-w-min w-flex sm:w-flex-nowrap sm:w-flex-row w-items-center w-p-0 sm:w-py-0 sm:w-pr-4 sm:w-justify-end">
+        {% block toggles %}
+            {% if side_panels %}
+                {% include "wagtailadmin/shared/side_panel_toggles.html" %}
+            {% endif %}
+            {% if history_url %}
+                {% include "wagtailadmin/shared/headers/_history_icon_link.html" with history_url=history_url nav_icon_button_classes=nav_icon_button_classes nav_icon_classes=nav_icon_classes only %}
+            {% endif %}
+        {% endblock %}
+    </div>
+</div>
+</header>
+{% block side_panels %}
+    {% if side_panels %}
+        {% include "wagtailadmin/shared/side_panels.html" %}
+    {% endif %}
+{% endblock %}
 </div>

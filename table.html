@@ -1,9 +1,6 @@
 {% load table_block_tags %}
-
 <table>
-    {% if table_caption %}
-        <caption>{{ table_caption }}</caption>
-    {% endif %}
+    {% if table_caption %}<caption>{{ table_caption }}</caption>{% endif %}
     {% if table_header %}
         <thead>
             <tr>
@@ -11,7 +8,9 @@
                     {% with forloop.counter0 as col_index %}
                         {% cell_hidden 0 col_index as is_hidden %}
                         {% if not is_hidden %}
-                            <th scope="col" {% cell_classname 0 col_index %} {% cell_span 0 col_index %}>
+                            <th scope="col"
+                                {% cell_classname 0 col_index %}
+                                {% cell_span 0 col_index %}>
                                 {% if column.strip %}
                                     {% if html_renderer %}
                                         {{ column.strip|safe|linebreaksbr }}
@@ -35,7 +34,9 @@
                             {% cell_hidden row_index col_index table_header as is_hidden %}
                             {% if not is_hidden %}
                                 {% if first_col_is_header and forloop.first %}
-                                    <th scope="row" {% cell_classname row_index col_index table_header %} {% cell_span row_index col_index table_header %}>
+                                    <th scope="row"
+                                        {% cell_classname row_index col_index table_header %}
+                                        {% cell_span row_index col_index table_header %}>
                                         {% if column.strip %}
                                             {% if html_renderer %}
                                                 {{ column.strip|safe|linebreaksbr }}
@@ -45,7 +46,8 @@
                                         {% endif %}
                                     </th>
                                 {% else %}
-                                    <td {% cell_classname row_index col_index table_header %} {% cell_span row_index col_index table_header %}>
+                                    <td {% cell_classname row_index col_index table_header %}
+                                        {% cell_span row_index col_index table_header %}>
                                         {% if column.strip %}
                                             {% if html_renderer %}
                                                 {{ column.strip|safe|linebreaksbr }}

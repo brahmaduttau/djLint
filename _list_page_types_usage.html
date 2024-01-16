@@ -1,5 +1,4 @@
 {% load i18n wagtailadmin_tags wagtailcore_tags %}
-
 <table class="listing {% block table_classname %}{% endblock table_classname %}">
     <col width="12%" />
     <col width="12%" />
@@ -9,21 +8,11 @@
     <thead>
         {% block post_parent_page_headers %}
             <tr class="table-headers">
-                <th class="title">
-                    {% trans 'Type' %}
-                </th>
-                <th class="app-label">
-                    {% trans 'App' %}
-                </th>
-                <th class="count">
-                    {% trans 'Pages' %}
-                </th>
-                <th class="last-edited-page">
-                    {% trans 'Last edited page' %}
-                </th>
-                <th class="last-edited-at">
-                    {% trans 'Last edit' %}
-                </th>
+                <th class="title">{% trans 'Type' %}</th>
+                <th class="app-label">{% trans 'App' %}</th>
+                <th class="count">{% trans 'Pages' %}</th>
+                <th class="last-edited-page">{% trans 'Last edited page' %}</th>
+                <th class="last-edited-at">{% trans 'Last edit' %}</th>
                 {% block extra_columns %}
                 {% endblock extra_columns %}
             </tr>
@@ -38,9 +27,7 @@
                             {{ page_type.name|title }}
                         {% endblock page_type %}
                     </td>
-                    <td class="app-label" valign="top">
-                        {{ page_type.app_label }}.{{ page_type.model }}
-                    </td>
+                    <td class="app-label" valign="top">{{ page_type.app_label }}.{{ page_type.model }}</td>
                     <td class="count" valign="top">
                         {% if page_type.count > 0 %}
                             <a href="{% url 'wagtailadmin_pages:type_use' content_type_app_name=page_type.app_label content_type_model_name=page_type.model %}">{{ page_type.count }}</a>
@@ -53,9 +40,7 @@
                             {% page_permissions page_type.last_edited_page as perms %}
                             {% with page_display_title=page_type.last_edited_page.get_admin_display_title %}
                                 {% if perms.can_edit %}
-                                    <a href="{% url 'wagtailadmin_pages:edit' page_type.last_edited_page.id %}">
-                                        {{ page_display_title }}
-                                    </a>
+                                    <a href="{% url 'wagtailadmin_pages:edit' page_type.last_edited_page.id %}">{{ page_display_title }}</a>
                                 {% else %}
                                     <p>{{ page_display_title }}</p>
                                 {% endif %}
