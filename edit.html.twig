@@ -1,0 +1,126 @@
+{% extends '@bolt/_base/layout.html.twig' %}
+{% import '@bolt/_macro/_macro.html.twig' as macro %}
+
+{% set alltypes = ['select'] %}
+{% for key, fielddefinition in record.definition.fields %}
+    {% set alltypes = alltypes|merge([fielddefinition.type]) %}
+{% endfor %}
+
+{# Set the displayTitle, according to the record being new or not, whether it has a title set and if it's a singleton #}
+{% if record|title(currentlocale) %}
+    {% set displayTitle = record|title(currentlocale) %}
+{% elseif record.id %}
+    {% set displayTitle = __('caption.untitled_contenttype', {'%contenttype%': record.definition.singular_name}) %}
+{% elseif record.definition.singleton %}
+    {% set displayTitle = record.definition.singular_name %}
+{% else %}
+    {% set displayTitle = __('caption.new_contenttype', {'%contenttype%': record.definition.singular_name}) %}
+{% endif %}
+
+{# The 'title' and 'shoulder' blocks are the main heading of the page. #}
+{% block shoulder %}
+    {{- (app.request.get('_route') == 'bolt_content_duplicate') ? 'caption.duplicate'|trans : 'caption.edit'|trans }} {{ record.definition.singular_name -}}
+{% endblock shoulder %}
+
+{% block title %}
+    {{ icon(record) }}
+    <div class="admin__header--title-inner" style="display: inline">
+        {{ displayTitle|excerpt(50) }}
+    </div>
+{% endblock %}
+
+{% block vue_id 'editor' %}
+
+{# This 'topsection' gets output _before_ the main form, allowing `dump()`, without breaking Vue #}
+{% block topsection %}
+
+{#    {{ dump(record) }}#}
+
+{% endblock %}
+
+{% block main %}
+
+    {% if record.definition.virtual|default(false) %}
+        <div class="alert alert-danger" role="alert">
+            {{ 'content.edit_missing_definition'|trans({'%contenttype%': record.definition.name}) }}
+        </div>
+    {% endif %}
+
+    {% if errors is defined %}
+        {%for error in errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error.propertyPath }}: {{error.message}}
+            </div>
+        {%endfor%}
+    {% endif %}
+
+    <form method="post" id="editcontent" data-record="{{ record.id }}">
+        {{ widgets('editcontent_below_header') }}
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('editrecord') }}">
+        <input type="hidden" name="_edit_locale" value="{{ currentlocale }}">
+        {# To prevent confusion in browsers about which submit to use when pressing 'enter', we
+        provide this _input_ here. All browsers will use this as a default. See #454 on Github. #}
+        <input type="submit" form="editcontent" style="display: none;" value="__('action.save')">
+
+        {% set groups = record.definition.groups|default([]) %}
+
+        {% include '@bolt/content/_tabs.html.twig' %}
+
+        <div class="tab-content" id="nav-tabContent">
+
+            {% include '@bolt/content/_fields.html.twig' %}
+
+            {# Note: the `|slug` below should be entirely unnecesary, but is added here for consistency, if a certain
+            locale / slugify config insist on keeping uppercase letters. See: https://github.com/bolt/core/pull/2907 #}
+            <div class="tab-pane" id="{{ "Relations"|slug }}" role="tabpanel" aria-labelledby="relations-tab">
+                {% if record.definition.relations.count()|default(0) > 0 %}
+                    {% include '@bolt/content/_relationships.html.twig' %}
+                {% endif %}
+
+                {% if record.definition.taxonomy.count()|default(0) > 0 %}
+                    {% include '@bolt/content/_taxonomies.html.twig' %}
+                {% endif %}
+            </div>
+
+        </div>
+        {{ widgets('editcontent_bottom') }}
+
+        <hr>
+        {% include '@bolt/content/_buttons.html.twig' with {'hide_on_mobile': true} %}
+
+    </form>
+
+{% endblock %}
+
+{% block aside %}
+    <div id="metadata">
+        <form class="ui form">
+            {{ widgets('editcontent_aside_top') }}
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    {{ macro.icon('star') }} {{ 'title.primary_actions'|trans }}
+                </div>
+                <div class="card-body">
+                    {% include '@bolt/content/_buttons.html.twig' with {'status': true} %}
+                </div>
+            </div>
+
+            {% include '@bolt/content/_localeswitcher.html.twig' %}
+            {{ widgets('editcontent_aside_middle') }}
+
+            <div class="card">
+                <div class="card-header">
+                    {{ macro.icon('sliders-h') }} {{ 'title.options'|trans }}
+                </div>
+                <div class="card-body">
+                    {% include '@bolt/content/_fields_aside.html.twig' %}
+                    {% include '@bolt/content/_fields_aside_summary.html.twig' %}
+                </div>
+            </div>
+
+            {{ widgets('editcontent_aside_bottom') }}
+        </form>
+    </div>
+{% endblock aside %}
