@@ -12,6 +12,7 @@ from .formatter.css import format_css
 from .formatter.expand import expand_html
 from .formatter.indent import indent_html
 from .formatter.js import format_js
+from .formatter.siglequotes import clean_single_quotes
 from .settings import Config
 
 
@@ -27,7 +28,9 @@ def formatter(config: Config, rawcode: str) -> str:
 
     condensed = clean_whitespace(expanded, config)
 
-    indented_code = indent_html(condensed, config)
+    cleaned_quoted_code = clean_single_quotes(condensed, config)
+
+    indented_code = indent_html(cleaned_quoted_code, config)
 
     beautified_code = condense_html(indented_code, config)
 

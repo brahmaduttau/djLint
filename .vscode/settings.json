@@ -1,0 +1,21 @@
+{
+    "yaml.schemas": {
+        "djlint": [
+            "scripts/rules_schema.yaml",
+            "file:///Users/in-brahmaduttau/projects/djLint/src/djlint/rules.yaml"
+        ]
+    },
+    "cSpell.words": [
+        "BLOCKQUOTE",
+        "DOTALL",
+        "ensp",
+        "FIELDSET",
+        "FIGCAPTION",
+        "keygen",
+        "nbsp",
+        "OPTGROUP",
+        "srcset",
+        "TBODY",
+        "THEAD"
+    ]
+}

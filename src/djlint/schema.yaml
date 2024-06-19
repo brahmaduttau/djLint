@@ -1,0 +1,27 @@
+$schema: https://json-schema.org/draft-07/schema#
+
+type: array
+items:
+  type: object
+  properties:
+    rule:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+        flags:
+          type: string
+        exclude:
+          type: array
+          items:
+            type: string
+        patterns:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - message
+        - patterns
