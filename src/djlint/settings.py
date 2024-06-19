@@ -269,6 +269,8 @@ class Config:
         self.lint = lint
         self.warn = warn
         self.css_file_path = css_file_path
+        self.css_rules={}
+        self.counter=0
 
         if src == "-":
             self.project_root = find_project_root(Path.cwd())
