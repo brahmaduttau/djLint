@@ -15,6 +15,7 @@ from ..helpers import (
 )
 from ..settings import Config
 from .attributes import format_attributes
+from .cssstyle import clean_inline_style_to_css_class, style_pattern
 
 
 def indent_html(rawcode: str, config: Config) -> str:
@@ -314,6 +315,14 @@ def indent_html(rawcode: str, config: Config) -> str:
                     rf"(\s*?)(<(?:{config.indent_html_tags})\b)((?:\"[^\"]*\"|'[^']*'|{{[^}}]*}}|[^'\">{{}}\/])+?)(\s?/?>)",
                     re.VERBOSE | re.IGNORECASE,
                 ),
+                func,
+                tmp,
+            )
+
+        func = partial(clean_inline_style_to_css_class, config, item)
+
+        tmp = re.sub(
+                style_pattern,
                 func,
                 tmp,
             )

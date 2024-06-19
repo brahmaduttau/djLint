@@ -1,4 +1,3 @@
-import pytest
 
 from src.djlint.formatter.singlequotes import clean_single_quotes
 from src.djlint.settings import Config
