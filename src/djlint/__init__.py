@@ -2,6 +2,7 @@
 """djLint · lint and reformat HTML templates."""
 
 import os
+import re
 import sys
 import tempfile
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -458,6 +459,7 @@ def main(
         os.unlink(temp_file.name)
 
     if bool(print_output(config, file_errors, len(file_list))) and config.warn is False:
+        remove_duplicate_classes(config)
         sys.exit(1)
 
 
@@ -471,3 +473,29 @@ def process(config: Config, this_file: Path) -> Dict:
         output["lint_message"] = lint_file(config, this_file)
 
     return output
+
+def remove_duplicate_classes(config: Config):
+    """Remove duplicate classes from CSS file.
+
+    Args:
+    ----
+        config (Config): The configuration object.
+
+    """
+    with open(config.css_file_path, "r") as file:
+        css_content = file.read()
+        file.close()
+
+    class_pattern = re.compile(r"(\.[\w-]+\s*\{[^\}]*\})", re.MULTILINE)
+    classes = class_pattern.findall(css_content)
+
+    unique_classes = {}
+    for class_def in classes:
+        class_name = class_def.split("{")[0].strip()
+        if class_name not in unique_classes:
+            unique_classes[class_name] = class_def
+
+    # Write unique classes back to a new CSS file
+    with open(config.css_file_path, "w") as file:
+        for class_def in unique_classes.values():
+            file.write(class_def + "\n")

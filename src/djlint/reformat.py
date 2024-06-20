@@ -66,31 +66,5 @@ def reformat_file(config: Config, this_file: Path) -> dict:
             difflib.unified_diff(rawcode.splitlines(), beautified_code.splitlines())
         )
     }
-    remove_duplicate_classes(config)
+
     return out
-
-def remove_duplicate_classes(config: Config):
-    """Remove duplicate classes from CSS file.
-
-    Args:
-    ----
-        config (Config): The configuration object.
-
-    """
-    with open(config.css_file_path, "r") as file:
-        css_content = file.read()
-        file.close()
-
-    class_pattern = re.compile(r"(\.[\w-]+\s*\{[^\}]*\})", re.MULTILINE)
-    classes = class_pattern.findall(css_content)
-
-    unique_classes = {}
-    for class_def in classes:
-        class_name = class_def.split("{")[0].strip()
-        if class_name not in unique_classes:
-            unique_classes[class_name] = class_def
-
-    # Write unique classes back to a new CSS file
-    with open(config.css_file_path, "w") as file:
-        for class_def in unique_classes.values():
-            file.write(class_def + "\n")
