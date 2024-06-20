@@ -268,7 +268,7 @@ class Config:
         self.check = check
         self.lint = lint
         self.warn = warn
-        self.css_file_path = css_file_path
+        self.css_file_path = css_file_path or "djlint.css"
         self.css_rules={}
         self.counter=0
 

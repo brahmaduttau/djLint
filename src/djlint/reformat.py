@@ -16,7 +16,7 @@ from .formatter.siglequotes import clean_single_quotes
 from .settings import Config
 
 
-def formatter(config: Config, rawcode: str) -> str:
+def formatter(config: Config, rawcode: str,this_file:Path) -> str:
     """Format a html string."""
     if not rawcode:
         return rawcode
@@ -30,7 +30,7 @@ def formatter(config: Config, rawcode: str) -> str:
 
     cleaned_quoted_code = clean_single_quotes(condensed, config)
 
-    indented_code = indent_html(cleaned_quoted_code, config)
+    indented_code = indent_html(cleaned_quoted_code, config,this_file=this_file)
 
     beautified_code = condense_html(indented_code, config)
 
@@ -53,7 +53,7 @@ def reformat_file(config: Config, this_file: Path) -> dict:
     """Reformat html file."""
     rawcode = this_file.read_bytes().decode("utf8")
 
-    beautified_code = formatter(config, rawcode)
+    beautified_code = formatter(config, rawcode,this_file=this_file)
 
     if (
         config.check is not True and beautified_code != rawcode
