@@ -10,7 +10,7 @@ style_pattern = re.compile(r'style="([^"]*)"')
 class_pattern = re.compile(r'class="([^"]*)"')
 
 
-def add_css_classes(config: Config, css_classes: list = [], inline_styles: str = "", this_file: str = "") -> list:
+def add_css_classes(config: Config, css_classes: list = [], inline_styles: str = "") -> list:
     """Add CSS classes.
 
     Args:
@@ -30,7 +30,7 @@ def add_css_classes(config: Config, css_classes: list = [], inline_styles: str =
         None,
     )
     if not class_name:
-        rnd = hashlib.shake_256(str(this_file).encode()).hexdigest(5)
+        rnd = hashlib.shake_256(str(inline_styles).encode()).hexdigest(5)
         class_name = f"class-{rnd}-{config.counter}"
         config.css_rules[class_name] = inline_styles
     css_classes.append(class_name)
@@ -38,7 +38,7 @@ def add_css_classes(config: Config, css_classes: list = [], inline_styles: str =
     return css_classes
 
 
-def clean_inline_style_to_css_class(config: Config, html: str, this_file: str) -> str:
+def clean_inline_style_to_css_class(config: Config, html: str) -> str:
     """Format CSS style.
 
     Args:
@@ -67,7 +67,6 @@ def clean_inline_style_to_css_class(config: Config, html: str, this_file: str) -
             config=config,
             css_classes=flattened_class_list or [],
             inline_styles=attrib_value,
-            this_file=this_file,
         )
         config.counter += 1
 
@@ -76,7 +75,6 @@ def clean_inline_style_to_css_class(config: Config, html: str, this_file: str) -
         new_class_str = 'class="' + " ".join(list(set(css_classes))) + '"'
         html= add_or_update_class(html, new_class_str)
     create_css_file(config)
-    remove_duplicate_classes(config.css_file_path)
     return html
 
 
@@ -112,30 +110,3 @@ def create_css_file(config: Config) -> None:
     with open(config.css_file_path, "a+") as f:
         for class_name, styles in config.css_rules.items():
             f.write(f".{class_name} {{{styles}}}\n")
-
-
-def remove_duplicate_classes(css_file_path):
-    """Remove duplicate classes from CSS file.
-
-    Args:
-    ----
-        css_file_path (str): The path to the CSS file.
-
-    """
-    with open(css_file_path, "r") as file:
-        css_content = file.read()
-        file.close()
-
-    class_pattern = re.compile(r"(\.[\w-]+\s*\{[^\}]*\})", re.MULTILINE)
-    classes = class_pattern.findall(css_content)
-
-    unique_classes = {}
-    for class_def in classes:
-        class_name = class_def.split("{")[0].strip()
-        if class_name not in unique_classes:
-            unique_classes[class_name] = class_def
-
-    # Write unique classes back to a new CSS file
-    with open(css_file_path, "w") as file:
-        for class_def in unique_classes.values():
-            file.write(class_def + "\n")

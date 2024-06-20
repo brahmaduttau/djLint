@@ -16,7 +16,7 @@ from ..helpers import (
 )
 from ..settings import Config
 from .attributes import format_attributes
-from .cssstyle import clean_inline_style_to_css_class, style_pattern
+from .cssstyle import clean_inline_style_to_css_class
 
 
 def indent_html(rawcode: str, config: Config, this_file: Path) -> str:
@@ -313,7 +313,7 @@ def indent_html(rawcode: str, config: Config, this_file: Path) -> str:
                 tmp,
             )
 
-        tmp = clean_inline_style_to_css_class(config=config, html=tmp, this_file=this_file)
+        tmp = clean_inline_style_to_css_class(config=config, html=tmp)
 
         # turn off raw block if we hit end - for one line raw blocks, but not an inline raw
         if is_ignored_block_closing(config, item) and (
