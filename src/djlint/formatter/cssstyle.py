@@ -31,7 +31,7 @@ def add_css_classes(config: Config, css_classes: list = [], inline_styles: str =
     )
     if not class_name:
         rnd = hashlib.shake_256(str(this_file).encode()).hexdigest(5)
-        class_name = f"{rnd}-{config.counter}"
+        class_name = f"class-{rnd}-{config.counter}"
         config.css_rules[class_name] = inline_styles
     css_classes.append(class_name)
     config.counter += 1
@@ -55,21 +55,26 @@ def clean_inline_style_to_css_class(config: Config, html: str, this_file: str) -
     matches = style_pattern.findall(html)
     css_class = [css.split() for css in class_pattern.findall(html)]
     flattened_class_list = [item for sublist in css_class for item in sublist]
-    css_classes = {
-        add_css_classes(
+    css_classes = []
+    for match in matches:
+        if "'" in match:
+            attrib_value = match.strip("'")
+        elif '"' in match:
+            attrib_value = match.strip('"')
+        else:
+            attrib_value = match
+        css_classes = add_css_classes(
             config=config,
-            css_classes=flattened_class_list,
-            inline_styles=match,
+            css_classes=flattened_class_list or [],
+            inline_styles=attrib_value,
             this_file=this_file,
         )
-        for match in matches
-    }
+        config.counter += 1
 
-    html = re.sub(style_pattern, "", html)
-
+    html = re.sub(r'style="[^"]*"', '', html)
     if css_classes:
-        new_class_str = 'class="' + " ".join(set(css_classes)) + '"'
-        html = add_or_update_class(html, new_class_str)
+        new_class_str = 'class="' + " ".join(list(set(css_classes))) + '"'
+        html= add_or_update_class(html, new_class_str)
     create_css_file(config)
     remove_duplicate_classes(config.css_file_path)
     return html
