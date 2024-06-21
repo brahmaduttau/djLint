@@ -4,13 +4,13 @@ Much code is borrowed from https://github.com/rareyman/HTMLBeautify, many thanks
 """
 
 import difflib
-import re
 from pathlib import Path
 
 from .formatter.compress import compress_html
 from .formatter.condense import clean_whitespace, condense_html
 from .formatter.css import format_css
 from .formatter.expand import expand_html
+from .formatter.htmlentities import replace_html_escaped_entities
 from .formatter.indent import indent_html
 from .formatter.js import format_js
 from .formatter.siglequotes import clean_single_quotes
@@ -27,7 +27,9 @@ def formatter(config: Config, rawcode: str,this_file:Path) -> str:
 
     expanded = expand_html(compressed, config)
 
-    condensed = clean_whitespace(expanded, config)
+    htmlcontent = replace_html_escaped_entities(expanded, config)
+
+    condensed = clean_whitespace(htmlcontent, config)
 
     cleaned_quoted_code = clean_single_quotes(condensed, config)
 

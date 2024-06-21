@@ -266,3 +266,16 @@
     flags: re.I
     patterns:
       - <\w[^>]*?\s\K([a-z-:][a-z-]*?)(?==(?:\"[^\"]*\"|'[^']*'|{{(?:(?!}}).)*}}|{%(?:(?!%}).)*%}|{#(?:(?!#}).)*#}|[^'\">{}])*[^-:a-z]\1=[^>]*?>)
+- rule:
+    name: AS01
+    message: Accessability image should have alt attribute.
+    flags: re.DOTALL
+    patterns:
+      - <img[^>]*?alt=["'][^"']*["'][^>]*>
+- rule:
+    name: AS02
+    message: Accessability validate whether a video tag has closed captioning.
+    flags: re.DOTALL
+    patterns:
+      - <video[^>]*?captions=["'][^"']*["'][^>]*>
+

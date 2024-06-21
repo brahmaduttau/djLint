@@ -1,3 +1,5 @@
+"""Module containing tests for the cssstyle formatter."""
+
 import pytest
 
 from src.djlint.formatter.cssstyle import (
