@@ -474,6 +474,7 @@ def process(config: Config, this_file: Path) -> Dict:
 
     return output
 
+
 def remove_duplicate_classes(config: Config):
     """Remove duplicate classes from CSS file.
 

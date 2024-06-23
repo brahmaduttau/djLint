@@ -39,7 +39,9 @@ def indent_html(rawcode: str, config: Config, this_file: Path) -> str:
         """
         func = partial(fix_tag_spacing, rawcode)
 
-        rawcode = re.sub(r"({%-?\+?)[ ]*?(\w(?:(?!%}).)*?)[ ]*?(\+?-?%})", func, rawcode)
+        rawcode = re.sub(
+            r"({%-?\+?)[ ]*?(\w(?:(?!%}).)*?)[ ]*?(\+?-?%})", func, rawcode
+        )
 
         rawcode = re.sub(r"({{)[ ]*?(\w(?:(?!}}).)*?)[ ]*?(\+?-?}})", func, rawcode)
 
@@ -278,7 +280,9 @@ def indent_html(rawcode: str, config: Config, this_file: Path) -> str:
             tmp = (indent * indent_level) + item + "\n"
             indent_level = indent_level + 1
 
-        elif is_raw_first_line is True or (is_safe_closing_tag(config, item) and is_block_raw is False):
+        elif is_raw_first_line is True or (
+            is_safe_closing_tag(config, item) and is_block_raw is False
+        ):
             tmp = (indent * indent_level) + item + "\n"
 
         elif is_block_raw is True or not item.strip():
@@ -317,7 +321,8 @@ def indent_html(rawcode: str, config: Config, this_file: Path) -> str:
 
         # turn off raw block if we hit end - for one line raw blocks, but not an inline raw
         if is_ignored_block_closing(config, item) and (
-            in_script_style_tag is False or (in_script_style_tag and is_script_style_block_closing(config, item))
+            in_script_style_tag is False
+            or (in_script_style_tag and is_script_style_block_closing(config, item))
         ):
             in_script_style_tag = False
             if not is_safe_closing_tag(config, item):
@@ -333,7 +338,9 @@ def indent_html(rawcode: str, config: Config, this_file: Path) -> str:
         try:
             # try to format the contents as json
             data = json.loads(contents)
-            contents = json.dumps(data, trailing_commas=False, ensure_ascii=False, quote_keys=True)
+            contents = json.dumps(
+                data, trailing_commas=False, ensure_ascii=False, quote_keys=True
+            )
 
             if tag_size + len(contents) >= config.max_line_length:
                 # if the line is too long we can indent the json
@@ -349,9 +356,15 @@ def indent_html(rawcode: str, config: Config, this_file: Path) -> str:
             # was not json.. try to eval as set
             try:
                 # if contents is a python keyword, do not evaluate it.
-                evaluated = str(eval(contents)) if contents not in ["object"] else contents
+                evaluated = (
+                    str(eval(contents)) if contents not in ["object"] else contents
+                )
                 # need to unwrap the eval
-                contents = evaluated[1:-1] if contents[:1] != "(" and evaluated[:1] == "(" else evaluated
+                contents = (
+                    evaluated[1:-1]
+                    if contents[:1] != "(" and evaluated[:1] == "("
+                    else evaluated
+                )
             except:
                 contents = contents.strip()
 

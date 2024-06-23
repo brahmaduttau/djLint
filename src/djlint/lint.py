@@ -1,4 +1,5 @@
 """Djlint html linter."""
+
 import importlib
 from pathlib import Path
 from typing import Dict, List

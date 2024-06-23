@@ -1,112 +1,64 @@
-"""Format attributes."""
+"""djLint function to call cssbeautifier."""
 
-import hashlib
+import logging
+from functools import partial
 
+import cssbeautifier
 import regex as re
+from jsbeautifier.javascript.options import BeautifierOptions
 
+from ..helpers import child_of_unformatted_block
 from ..settings import Config
 
-style_pattern = re.compile(r'style="([^"]*)"')
-class_pattern = re.compile(r'class="([^"]*)"')
+logging.basicConfig(level=logging.INFO)
 
 
-def add_css_classes(config: Config, css_classes: list = [], inline_styles: str = "") -> list:
-    """Add CSS classes.
+def format_css(html: str, config: Config) -> str:
+    """Format css inside <style> tags."""
 
-    Args:
-    ----
-        config (Config): The configuration object.
-        css_classes (list, optional): The list of CSS classes. Defaults to [].
-        inline_styles (str, optional): The inline styles. Defaults to "".
-        this_file (str, optional): The current file. Defaults to "".
+    def launch_formatter(config: Config, html: str, match: re.Match) -> str:
+        """Add break after if not in ignored block."""
+        if child_of_unformatted_block(config, html, match):
+            return match.group()
 
-    Returns:
-    -------
-        str: The updated list of CSS classes.
+        if not match.group(3).strip():
+            return match.group()
 
-    """
-    class_name = next(
-        (cls for cls, styles in config.css_rules.items() if styles == inline_styles),
-        None,
+        indent = len(match.group(1)) * " "
+
+        # because of the param options for js-beautifier we cannot pass
+        # in a fixed space leading.
+        # so, call formatter twice, once with a fake indent.
+        # check which lines changed (these are the formattable lines)
+        # and add the leading space to them.
+
+        config.css_config["indent_level"] = 1
+        opts = BeautifierOptions(config.css_config)
+        beautified_lines = cssbeautifier.beautify(match.group(3), opts).splitlines()
+
+        config.js_config["indent_level"] = 2
+        opts = BeautifierOptions(config.js_config)
+        beautified_lines_test = cssbeautifier.beautify(
+            match.group(3), opts
+        ).splitlines()
+
+        beautified = ""
+        for line, test in zip(beautified_lines, beautified_lines_test):
+            beautified += "\n"
+            if line == test:
+                beautified += line
+                continue
+            beautified += indent + line
+
+        return match.group(1) + match.group(2) + beautified + "\n" + indent
+
+    func = partial(launch_formatter, config, html)
+
+    return re.sub(
+        re.compile(
+            r"([ ]*?)(<(?:style)\b(?:\"[^\"]*\"|'[^']*'|{[^}]*}|[^'\">{}])*>)(.*?)(?=</style>)",
+            re.IGNORECASE | re.DOTALL,
+        ),
+        func,
+        html,
     )
-    if not class_name:
-        rnd = hashlib.shake_256(str(inline_styles).encode()).hexdigest(5)
-        class_name = f"class-{rnd}-{config.counter}"
-        config.css_rules[class_name] = inline_styles
-    css_classes.append(class_name)
-    config.counter += 1
-    return css_classes
-
-
-def clean_inline_style_to_css_class(config: Config, html: str) -> str:
-    """Format CSS style.
-
-    Args:
-    ----
-        config (Config): The configuration object.
-        html (str): The HTML string.
-        this_file: The current file.
-
-    Returns:
-    -------
-        str: The formatted HTML string.
-
-    """
-    matches = style_pattern.findall(html)
-    css_class = [css.split() for css in class_pattern.findall(html)]
-    flattened_class_list = [item for sublist in css_class for item in sublist]
-    css_classes = []
-    for match in matches:
-        if "'" in match:
-            attrib_value = match.strip("'")
-        elif '"' in match:
-            attrib_value = match.strip('"')
-        else:
-            attrib_value = match
-        css_classes = add_css_classes(
-            config=config,
-            css_classes=flattened_class_list or [],
-            inline_styles=attrib_value,
-        )
-        config.counter += 1
-
-    html = re.sub(r'style="[^"]*"', '', html)
-    if css_classes:
-        new_class_str = 'class="' + " ".join(list(set(css_classes))) + '"'
-        html= add_or_update_class(html, new_class_str)
-    create_css_file(config)
-    return html
-
-
-def add_or_update_class(html: str, new_class_str: str) -> str:
-    """Add or update class attribute.
-
-    Args:
-    ----
-        html (str): The HTML string.
-        new_class_str (str): The new class string.
-
-    Returns:
-    -------
-        str: The formatted HTML string.
-
-    """
-    if re.search(class_pattern, html):
-        updated_html = re.sub(class_pattern, new_class_str, html)
-    else:
-        updated_html = re.sub(r"(<\w+)", r"\1 " + new_class_str, html, 1)
-
-    return updated_html
-
-
-def create_css_file(config: Config) -> None:
-    """Create CSS file.
-
-    Args:
-    ----
-        config (Config): The configuration object.
-
-    """
-    with open(config.css_file_path, "a+") as f:
-        for class_name, styles in config.css_rules.items():
-            f.write(f".{class_name} {{{styles}}}\n")

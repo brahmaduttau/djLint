@@ -1,4 +1,5 @@
 """Build src file list."""
+
 import re
 from pathlib import Path
 from typing import List

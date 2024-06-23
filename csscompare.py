@@ -1,3 +1,5 @@
+"""Module that provides functions for comparing and replacing CSS styles."""
+
 import os
 import pprint
 import re

@@ -1,4 +1,5 @@
 """djLint function to call cssbeautifier."""
+
 from functools import partial
 
 import cssbeautifier

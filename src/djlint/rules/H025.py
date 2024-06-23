@@ -1,4 +1,5 @@
 """rule H025: Check for orphans html tags."""
+
 import copy
 from typing import Any, Dict, List
 

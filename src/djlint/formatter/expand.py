@@ -67,7 +67,8 @@ def expand_html(html: str, config: Config) -> str:
             return match.group(1)
 
         if not re.findall(
-            r"\<(?:" + str(config.indent_html_tags)
+            r"\<(?:"
+            + str(config.indent_html_tags)
             # added > as not allowed inside a "" or '' to prevent invalid wild html matches
             # for issue #640
             + r")\b(?:\"[^\">]*\"|'[^'>]*'|{{[^}]*}}|{%[^%]*%}|{\#[^\#]*\#}|[^>{}])*?"

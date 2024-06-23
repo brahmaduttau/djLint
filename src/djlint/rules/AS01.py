@@ -1,4 +1,5 @@
 """Validate accessibility of HTML content."""
+
 from typing import Any, Dict, List
 
 from bs4 import BeautifulSoup
@@ -10,10 +11,12 @@ from ..settings import Config
 location = "./cachedir"
 memory = Memory(location, verbose=0)
 
+
 class AccessibilityError(Exception):
     """Exception raised for accessibility errors."""
 
     pass
+
 
 def check_alt_att_on_img(html: str):
     """Check if the 'alt' attribute is present and not empty on image tags in the HTML.

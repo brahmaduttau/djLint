@@ -1,5 +1,6 @@
 """Format attributes."""
 
+import html as htmlentities
 from functools import partial
 
 import regex as re
@@ -210,3 +211,122 @@ def format_attributes(config: Config, html: str, match: re.match) -> str:
     attribute_string = "\n".join([x.rstrip() for x in attribute_string.splitlines()])
 
     return f"{attribute_string}"
+
+
+def replace_encoded_entities(html: str, config: Config) -> str:
+    """Replace encoded HTML entities with their corresponding characters."""
+
+    def replacement(match):
+        return htmlentities.unescape(match.group())
+
+    return re.sub(
+        pattern=re.compile(
+            pattern=r"&(?!(lt|gt|amp|quot|nbsp|ensp|emsp|thinsp))[#0-9a-z]{,30};",
+            flags=re.IGNORECASE | re.DOTALL,
+        ),
+        repl=replacement,
+        string=html,
+    )
+
+
+def replace_empty_alt_with_src_value(html_content):
+    """Replace empty alt attributes with the src attribute value in img tags.
+
+    :param html_content: A string containing HTML content
+    :return: Modified HTML content with empty alt attributes replaced by src values
+    """
+    img_tag_empty_alt_pattern = re.compile(
+        r'<img([^>]*?)src="(.*?)"([^>]*?)alt=""([^>]*?)>', re.IGNORECASE
+    )
+    img_tag_no_alt_pattern = re.compile(
+        r"<img\b(?:(?!(?:alt)=)[^>])*/?>", re.IGNORECASE
+    )
+
+    def replacement(match):
+        before_src = match.group(1)
+        src_value = match.group(2)
+        after_src_before_alt = match.group(3)
+        after_alt = match.group(4)
+        return f'<img alt="{src_value}" {after_alt}{before_src}src="{src_value}"{after_src_before_alt}/>'
+
+    modified_html_content = re.sub(
+        pattern=img_tag_no_alt_pattern, repl=replacement, string=html_content
+    )
+    modified_html_content = re.sub(
+        pattern=img_tag_empty_alt_pattern,
+        repl=replacement,
+        string=modified_html_content,
+    )
+    return modified_html_content
+
+
+def replace_empty_height_width(html_content):
+    """Replace empty height and width attributes in img tags.
+
+    :param html_content: A string containing HTML content.
+    :return: Modified HTML content with replaced height and width attributes.
+    """
+    img_tag_no_height_pattern = re.compile(
+        r"<img\b(?:(?!(?:height)=)[^>])*/?>", re.IGNORECASE
+    )
+    img_tag_no_width_pattern = re.compile(
+        r"<img\b(?:(?!(?:width)=)[^>])*/?>", re.IGNORECASE
+    )
+    space = " "
+
+    def replacement_width(match):
+        before_src = match.group()
+        return f'{before_src.replace("/>","").replace(" / ","")}{space}width="auto"{space}/>'
+
+    def replacement_height(match):
+        before_src = match.group()
+        return f'{before_src.replace("/>","").replace(" / ","")}{space}height="auto"{space}/>'
+
+    modified_html_content = re.sub(
+        pattern=img_tag_no_height_pattern, repl=replacement_height, string=html_content
+    )
+    modified_html_content = re.sub(
+        pattern=img_tag_no_width_pattern,
+        repl=replacement_width,
+        string=modified_html_content,
+    )
+    return modified_html_content
+
+
+def ensure_double_quoted_attributes(html_content):
+    """Ensure all HTML tag attributes are double-quoted.
+
+    :param html_content: A string containing HTML content.
+    :return: Modified HTML content with attributes double-quoted.
+    """
+    attr_pattern = re.compile(pattern=r'(\s\w+)=(".*?"|\'.*?\'|[^"\'\s>]+)')
+
+    def replace_attr(match):
+        attr_name, attr_value = match.groups()
+        if "'" in attr_value or '"' in attr_value:
+            unquoted_value = attr_value.strip("\"'")
+            return f'{attr_name}="{unquoted_value}"'
+        return f"{attr_name}={attr_value}"
+
+    return re.sub(pattern=attr_pattern, repl=replace_attr, string=html_content)
+
+
+def normalize_whitespace_in_template_tags(template_content):
+    """Normalize whitespace within Django template tags.
+
+    :param template_content: A string containing Django template content.
+    :return: Modified Django template content with normalized whitespace in template tags.
+    """
+    template_tag_pattern = re.compile(r"{%\s*(\w+)\s+(.*?)\s*%}")
+
+    def normalize_whitespace(match):
+        tag_name = match.group(1)
+        parameters = match.group(2)
+        normalized_parameters = " ".join(parameters.split())
+        if normalized_parameters:
+            return f"{{% {tag_name} {normalized_parameters} %}}"
+        return f"{{% {tag_name} %}}"
+
+    return re.sub(
+        pattern=template_tag_pattern, repl=normalize_whitespace, string=template_content
+    )

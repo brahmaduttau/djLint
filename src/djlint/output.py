@@ -1,4 +1,5 @@
 """Build djLint console output."""
+
 import shutil
 from collections import Counter
 from pathlib import Path
