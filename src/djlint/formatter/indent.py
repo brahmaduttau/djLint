@@ -1,7 +1,6 @@
 """djLint add indentation to html."""
 
 from functools import partial
-from pathlib import Path
 
 import json5 as json
 import regex as re
@@ -19,7 +18,7 @@ from djlint.helpers import (
 from djlint.settings import Config
 
 
-def indent_html(rawcode: str, config: Config, this_file: Path) -> str:
+def indent_html(rawcode: str, config: Config) -> str:
     """Indent raw code."""
     if config.profile not in ["handlebars", "golang"]:
         # we can try to fix template tags. ignore handlebars

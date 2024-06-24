@@ -120,7 +120,7 @@ def linter(config: Config, html: str, filename: str, filepath: str) -> Dict:
     return errors
 
 
-def lint_file(config: Config, this_file: Path) -> Dict:
+def lint_file(config: Config, this_file: Path) -> dict:
     """Check file for formatting errors."""
     filename = str(this_file)
 
