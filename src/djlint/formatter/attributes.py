@@ -5,8 +5,8 @@ from functools import partial
 
 import regex as re
 
-from ..helpers import child_of_ignored_block
-from ..settings import Config
+from djlint.helpers import child_of_ignored_block
+from djlint.settings import Config
 
 
 def format_template_tags(config: Config, attributes: str, spacing: int) -> str:

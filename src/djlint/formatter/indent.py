@@ -6,7 +6,7 @@ from pathlib import Path
 import json5 as json
 import regex as re
 
-from ..helpers import (
+from djlint.helpers import (
     inside_ignored_block,
     is_ignored_block_closing,
     is_ignored_block_opening,
@@ -14,9 +14,9 @@ from ..helpers import (
     is_script_style_block_closing,
     is_script_style_block_opening,
 )
-from ..settings import Config
-from .attributes import format_attributes
-from .cssstyle import clean_inline_style_to_css_class
+from djlint.settings import Config
+
+from .attributes import clean_inline_style_to_css_class, format_attributes
 
 
 def indent_html(rawcode: str, config: Config, this_file: Path) -> str:

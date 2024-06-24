@@ -3,10 +3,9 @@
 from typing import Any, Dict, List
 
 from bs4 import BeautifulSoup
+from djlint.settings import Config
 from joblib import Memory
 from py_w3c.validators.html.validator import HTMLValidator
-
-from ..settings import Config
 
 location = "./cachedir"
 memory = Memory(location, verbose=0)
@@ -15,7 +14,6 @@ memory = Memory(location, verbose=0)
 class AccessibilityError(Exception):
     """Exception raised for accessibility errors."""
 
-    pass
 
 
 def check_alt_att_on_img(html: str):
@@ -120,9 +118,7 @@ def check_hs_hierarchy(html: str):
                         AccessibilityError(
                             "AccessibilityError",
                             code_fragment,
-                            "Suspected hierarchical order, consider reviewing it, Tag {} appeared first even without the existence of the {} tag".format(
-                                name, value
-                            ),
+                            f"Suspected hierarchical order, consider reviewing it, Tag {name} appeared first even without the existence of the {value} tag",
                             code_fragment.sourceline,
                             code_fragment.sourcepos,
                         )

@@ -1,5 +1,5 @@
-#!/usr/bin/python
 """djLint · lint and reformat HTML templates."""
+from __future__ import annotations
 
 import os
 import re
@@ -59,6 +59,8 @@ from .src import get_src
     is_flag=True,
     help="Check formatting on the file(s).",
 )
+
+
 @click.option(
     "--indent",
     type=int,
@@ -424,18 +426,7 @@ def main(
                     pbar.update()
                     elapsed = pbar.format_interval(pbar.format_dict["elapsed"])
 
-            finished_bar_message = "{}{}{} {}{{n_fmt}}/{{total_fmt}}{} {}files{} {{bar}} {}{}{}    ".format(
-                Fore.BLUE + Style.BRIGHT,
-                message,
-                Style.RESET_ALL,
-                Fore.GREEN + Style.BRIGHT,
-                Style.RESET_ALL,
-                Fore.BLUE + Style.BRIGHT,
-                Style.RESET_ALL,
-                Fore.GREEN + Style.BRIGHT,
-                elapsed,
-                Style.RESET_ALL,
-            )
+            finished_bar_message = f"{Fore.BLUE + Style.BRIGHT}{message}{Style.RESET_ALL} {Fore.GREEN + Style.BRIGHT}{{n_fmt}}/{{total_fmt}}{Style.RESET_ALL} {Fore.BLUE + Style.BRIGHT}files{Style.RESET_ALL} {{bar}} {Fore.GREEN + Style.BRIGHT}{elapsed}{Style.RESET_ALL}    "
 
             finished_bar = tqdm(
                 total=len(file_list),
@@ -483,7 +474,7 @@ def remove_duplicate_classes(config: Config):
         config (Config): The configuration object.
 
     """
-    with open(config.css_file_path, "r") as file:
+    with open(config.css_file_path) as file:
         css_content = file.read()
         file.close()
 

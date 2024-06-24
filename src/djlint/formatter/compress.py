@@ -7,8 +7,8 @@ import regex as re
 from HtmlTagNames import html_tag_names
 from HtmlVoidElements import html_void_elements
 
-from ..helpers import child_of_unformatted_block
-from ..settings import Config
+from djlint.helpers import child_of_unformatted_block
+from djlint.settings import Config
 
 
 def compress_html(html: str, config: Config) -> str:
