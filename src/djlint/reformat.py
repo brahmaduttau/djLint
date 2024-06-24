@@ -6,18 +6,18 @@ Much code is borrowed from https://github.com/rareyman/HTMLBeautify, many thanks
 import difflib
 from pathlib import Path
 
-from .formatter.attributes import (
+from djlint.formatter.attributes import (
     ensure_double_quoted_attributes,
-    format_css,
     normalize_whitespace_in_template_tags,
     replace_encoded_entities,
 )
-from .formatter.compress import compress_html
-from .formatter.condense import clean_whitespace, condense_html
-from .formatter.expand import expand_html
-from .formatter.indent import indent_html
-from .formatter.js import format_js
-from .settings import Config
+from djlint.formatter.compress import compress_html
+from djlint.formatter.condense import clean_whitespace, condense_html
+from djlint.formatter.css import format_css
+from djlint.formatter.expand import expand_html
+from djlint.formatter.indent import indent_html
+from djlint.formatter.js import format_js
+from djlint.settings import Config
 
 
 def formatter(config: Config, rawcode: str) -> str:

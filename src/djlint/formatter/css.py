@@ -6,8 +6,8 @@ import cssbeautifier
 import regex as re
 from jsbeautifier.javascript.options import BeautifierOptions
 
-from ..helpers import child_of_unformatted_block
-from ..settings import Config
+from djlint.helpers import child_of_unformatted_block
+from djlint.settings import Config
 
 
 def format_css(html: str, config: Config) -> str:
