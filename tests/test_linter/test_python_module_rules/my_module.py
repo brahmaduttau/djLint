@@ -1,4 +1,5 @@
 """Test module for custom rules."""
+
 import re
 from typing import Any, Dict, List
 

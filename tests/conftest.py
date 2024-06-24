@@ -1,4 +1,5 @@
 """Djlint test config."""
+
 # pylint: disable=W0621,C0116
 import difflib
 import os

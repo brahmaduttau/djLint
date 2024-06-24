@@ -5,6 +5,7 @@
 
 poetry run pytest tests/test_config/test_format_js.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

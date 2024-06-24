@@ -4,6 +4,7 @@ https://github.com/jazzband/sorl-thumbnail
 
 poetry run pytest tests/test_django/test_thumbnail.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

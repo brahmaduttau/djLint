@@ -1,4 +1,5 @@
 """djLint · lint and reformat HTML templates."""
+
 from __future__ import annotations
 
 import os
@@ -8,7 +9,6 @@ import tempfile
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from functools import partial
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
 import click
 from click import echo
@@ -59,8 +59,6 @@ from .src import get_src
     is_flag=True,
     help="Check formatting on the file(s).",
 )
-
-
 @click.option(
     "--indent",
     type=int,
@@ -258,11 +256,11 @@ from .src import get_src
 )
 @colorama_text(autoreset=True)
 def main(
-    src: List[str],
+    src: list[str],
     extension: str,
     ignore: str,
     reformat: bool,
-    indent: Optional[int],
+    indent: int | None,
     check: bool,
     quiet: bool,
     profile: str,
@@ -274,7 +272,7 @@ def main(
     preserve_blank_lines: bool,
     format_css: bool,
     format_js: bool,
-    configuration: Optional[str],
+    configuration: str | None,
     statistics: bool,
     include: str,
     ignore_case: bool,
@@ -287,17 +285,17 @@ def main(
     exclude: str,
     extend_exclude: str,
     linter_output_format: str,
-    max_line_length: Optional[int],
-    max_attribute_length: Optional[int],
+    max_line_length: int | None,
+    max_attribute_length: int | None,
     format_attribute_template_tags: bool,
-    per_file_ignores: Optional[List[Tuple[str, str]]],
-    indent_css: Optional[int],
-    indent_js: Optional[int],
+    per_file_ignores: list[tuple[str, str]] | None,
+    indent_css: int | None,
+    indent_js: int | None,
     close_void_tags: bool,
     no_line_after_yaml: bool,
     no_function_formatting: bool,
     no_set_formatting: bool,
-    max_blank_lines: Optional[int],
+    max_blank_lines: int | None,
 ) -> None:
     """djLint · HTML template linter and formatter."""
     config = Config(
@@ -454,7 +452,7 @@ def main(
         sys.exit(1)
 
 
-def process(config: Config, this_file: Path) -> Dict:
+def process(config: Config, this_file: Path) -> dict:
     """Run linter or formatter."""
     output = {}
     if config.reformat or config.check:

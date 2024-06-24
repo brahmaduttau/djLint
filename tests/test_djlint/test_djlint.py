@@ -11,6 +11,7 @@ or::
     tox
 
 """
+
 # pylint: disable=W1510
 import subprocess
 import sys

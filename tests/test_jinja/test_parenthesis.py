@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_jinja/test_parenthesis.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

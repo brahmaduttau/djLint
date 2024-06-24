@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_cli.py
 """
+
 from click.testing import CliRunner
 
 from src.djlint import main as djlint

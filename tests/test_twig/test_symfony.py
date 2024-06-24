@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_twig/test_symfony.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

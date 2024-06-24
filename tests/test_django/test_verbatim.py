@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_django/test_verbatim.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

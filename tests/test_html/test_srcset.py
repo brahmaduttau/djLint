@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_html/test_srcset.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

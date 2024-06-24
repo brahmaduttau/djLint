@@ -3,6 +3,7 @@
 poetry run pytest tests/test_config/test_djlintrc
 
 """
+
 from pathlib import Path
 
 from src.djlint.settings import Config

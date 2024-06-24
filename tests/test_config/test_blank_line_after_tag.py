@@ -4,6 +4,7 @@
 
 poetry run pytest tests/test_config/test_blank_line_after_tag.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

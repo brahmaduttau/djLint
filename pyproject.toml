@@ -26,7 +26,7 @@ packages = [
 include = ["rules.yaml"]
 
 [tool.poetry.dependencies]
-python = "^3.8.0,<4.0"
+python = "^3.10"
 click = "^8.1.7"
 colorama = "^0.4.6"
 cssbeautifier = "^1.15.1"
@@ -43,6 +43,8 @@ beautifulsoup4 = "^4.12.3"
 joblib = "^1.4.2"
 py-w3c = "^0.3.1"
 cssutils = "^2.11.1"
+platformdirs = "^4.2.2"
+pyupgrade = "^3.16.0"
 
 [tool.poetry.scripts]
 djlint = "djlint:main"

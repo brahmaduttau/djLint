@@ -11,6 +11,7 @@ for a single test, run::
      --cov-branch --cov-report xml:coverage.xml --cov-report term-missing
 
 """
+
 # pylint: disable=C0116,W0702,W0703,C0103
 import os
 import shutil

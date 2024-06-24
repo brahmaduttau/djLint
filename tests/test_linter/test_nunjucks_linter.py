@@ -3,6 +3,7 @@
 poetry run pytest tests/test_linter/test_nunjucks_linter.py
 
 """
+
 import pytest
 
 from src.djlint.lint import linter

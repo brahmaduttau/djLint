@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_handlebars/test_with.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

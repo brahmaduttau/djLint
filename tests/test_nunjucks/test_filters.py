@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_nunjucks/test_filters.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

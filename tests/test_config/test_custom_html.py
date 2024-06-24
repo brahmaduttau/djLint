@@ -4,6 +4,7 @@
 
 poetry run pytest tests/test_config/test_custom_html.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

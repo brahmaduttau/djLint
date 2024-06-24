@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_html/test_next_line_empty.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

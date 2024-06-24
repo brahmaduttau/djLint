@@ -1,4 +1,3 @@
-
 """Module containing unit tests for the clean_single_quotes function."""
 
 from src.djlint.formatter.singlequotes import clean_single_quotes

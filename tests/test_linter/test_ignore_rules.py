@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_linter/test_ignore_rules.py
 """
+
 import pytest
 
 from src.djlint.lint import linter

@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_linter/test_h006.py
 """
+
 import pytest
 
 from src.djlint.lint import linter

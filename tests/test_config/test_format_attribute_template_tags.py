@@ -4,6 +4,7 @@
 
 poetry run pytest tests/test_config/test_format_attribute_template_tags.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

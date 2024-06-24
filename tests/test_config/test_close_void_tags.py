@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_config/test_close_void_tags.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

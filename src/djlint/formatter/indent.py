@@ -6,6 +6,8 @@ from pathlib import Path
 import json5 as json
 import regex as re
 
+from djlint.formatter.attributes import format_attributes
+from djlint.formatter.cssstyle import clean_inline_style_to_css_class
 from djlint.helpers import (
     inside_ignored_block,
     is_ignored_block_closing,
@@ -15,8 +17,6 @@ from djlint.helpers import (
     is_script_style_block_opening,
 )
 from djlint.settings import Config
-
-from .attributes import clean_inline_style_to_css_class, format_attributes
 
 
 def indent_html(rawcode: str, config: Config, this_file: Path) -> str:
@@ -112,9 +112,10 @@ def indent_html(rawcode: str, config: Config, this_file: Path) -> str:
         # or if it is trailing text
 
         elif (
-            re.findall(
-                re.compile(
-                    rf"""^(?:[^<\s].*?)? # start of a line, optionally with some text
+            (
+                re.findall(
+                    re.compile(
+                        rf"""^(?:[^<\s].*?)? # start of a line, optionally with some text
                     (?:
                         (?:<({slt_html})>)(?:.*?)(?:</(?:\1)>) # <span>stuff</span> >>>> match 1
                        |(?:<({slt_html})\b[^>]+?>)(?:.*?)(?:</(?:\2)>) # <span stuff>stuff</span> >>> match 2
@@ -136,11 +137,13 @@ def indent_html(rawcode: str, config: Config, this_file: Path) -> str:
                     )*? # optional of course
                     [^<]*?$ # with no other tags following until end of line
                 """,
-                    re.IGNORECASE | re.VERBOSE | re.MULTILINE,
-                ),
-                item,
+                        re.IGNORECASE | re.VERBOSE | re.MULTILINE,
+                    ),
+                    item,
+                )
             )
-        ) and is_block_raw is False:
+            and is_block_raw is False
+        ):
             tmp = (indent * indent_level) + item + "\n"
 
         # closing set tag

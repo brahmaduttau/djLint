@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_config/test_line_break_after_multiline_tag.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

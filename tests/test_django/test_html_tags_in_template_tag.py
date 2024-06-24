@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_django/test_html_tags_in_template_tag.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

@@ -32,11 +32,11 @@ def compare_css_styles(file_path1, file_path2):
         dict: A dictionary containing classes from the first file as keys and matching classes from the second file as values.
     """
     # Read the contents of the first file
-    with open(file_path1, "r") as file1:
+    with open(file_path1) as file1:
         content1 = file1.read()
 
     # Read the contents of the second file
-    with open(file_path2, "r") as file2:
+    with open(file_path2) as file2:
         content2 = file2.read()
 
     # Parse and normalize class styles from both files
@@ -67,7 +67,7 @@ def replace_string_in_html_files(folder_path, all_classes_styles):
                 file_path = os.path.join(root, file)
                 # Read the file content
                 print("Processing file:", file_path)
-                with open(file_path, "r", encoding="utf-8") as f:
+                with open(file_path, encoding="utf-8") as f:
                     content = f.read()
 
                 updated_content = replace_string_in_file(
@@ -83,7 +83,7 @@ def replace_string_in_css_files(file_path, all_classes_styles):
     # Walk through the folder
     # Read the file content
     print("Processing file:", file_path)
-    with open(file_path, "r", encoding="utf-8") as f:
+    with open(file_path, encoding="utf-8") as f:
         content = f.read()
 
     updated_content = replace_string_in_file(

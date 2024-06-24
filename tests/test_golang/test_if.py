@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_golang/test_if.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

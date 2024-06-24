@@ -11,6 +11,7 @@ leading tag can be indented, but not trailing tag.
 blocktrans/late "trimmed" can be fully formatted.
 
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

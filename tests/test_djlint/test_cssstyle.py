@@ -18,7 +18,9 @@ def config():
             self.css_rules = {}
             self.counter = 0
             self.css_file_path = "test.css"
+
     return Config()
+
 
 def test_add_css_classes(config):
     css_classes = ["class1", "class2"]
@@ -32,6 +34,7 @@ def test_add_css_classes(config):
     assert config.css_rules["random-0"] == "color: red;"
     assert config.counter == 1
 
+
 def test_clean_inline_style_to_css_class(config):
     html = '<div style="color: red;">'
     this_file = "test.html"
@@ -43,6 +46,7 @@ def test_clean_inline_style_to_css_class(config):
     assert config.css_rules["random-0"] == "color: red;"
     assert config.counter == 1
 
+
 def test_add_or_update_class():
     html = '<div class="old-class">'
     new_class_str = 'class="new-class"'
@@ -51,6 +55,7 @@ def test_add_or_update_class():
     result = add_or_update_class(html, new_class_str)
 
     assert result == expected
+
 
 def test_create_css_file(config):
     config.css_rules = {
@@ -61,14 +66,17 @@ def test_create_css_file(config):
 
     create_css_file(config)
 
-    with open(config.css_file_path, "r") as f:
+    with open(config.css_file_path) as f:
         result = f.read()
 
     assert result == expected
 
+
 def test_remove_duplicate_classes():
     css_file_path = "test.css"
-    css_content = ".class1 {color: red;}\n.class2 {font-size: 12px;}\n.class1 {color: blue;}\n"
+    css_content = (
+        ".class1 {color: red;}\n.class2 {font-size: 12px;}\n.class1 {color: blue;}\n"
+    )
     expected = ".class1 {color: red;}\n.class2 {font-size: 12px;}\n"
 
     with open(css_file_path, "w") as f:
@@ -76,7 +84,7 @@ def test_remove_duplicate_classes():
 
     remove_duplicate_classes(css_file_path)
 
-    with open(css_file_path, "r") as f:
+    with open(css_file_path) as f:
         result = f.read()
 
     assert result == expected

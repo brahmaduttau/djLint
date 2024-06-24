@@ -4,6 +4,7 @@
 
 poetry run pytest tests/test_config/test_preserve_leading_space.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

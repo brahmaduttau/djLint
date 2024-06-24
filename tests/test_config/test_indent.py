@@ -4,6 +4,7 @@
 
 poetry run pytest tests/test_config/test_indent.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

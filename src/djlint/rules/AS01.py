@@ -3,9 +3,10 @@
 from typing import Any, Dict, List
 
 from bs4 import BeautifulSoup
-from djlint.settings import Config
 from joblib import Memory
 from py_w3c.validators.html.validator import HTMLValidator
+
+from djlint.settings import Config
 
 location = "./cachedir"
 memory = Memory(location, verbose=0)
@@ -13,7 +14,6 @@ memory = Memory(location, verbose=0)
 
 class AccessibilityError(Exception):
     """Exception raised for accessibility errors."""
-
 
 
 def check_alt_att_on_img(html: str):

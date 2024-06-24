@@ -13,7 +13,6 @@ for a single test, run::
 """
 # pylint: disable=C0116
 
-
 from click.testing import CliRunner
 
 from src.djlint import main as djlint

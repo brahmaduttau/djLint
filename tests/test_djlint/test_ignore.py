@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_djlint/test_ignore.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

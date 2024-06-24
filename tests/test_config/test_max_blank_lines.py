@@ -2,6 +2,7 @@
 
 poetry run pytest tests/test_config/test_max_blank_lines.py
 """
+
 import pytest
 
 from src.djlint.reformat import formatter

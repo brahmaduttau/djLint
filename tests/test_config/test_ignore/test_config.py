@@ -3,6 +3,7 @@
 pytest tests/test_config/test_ignore
 
 """
+
 from click.testing import CliRunner
 
 from src.djlint import main as djlint
