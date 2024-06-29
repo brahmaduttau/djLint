@@ -653,6 +653,7 @@ def process_indentation(rawcode_flat_list, indent, config) -> Any:
             is_block_raw=is_block_raw,
             is_safe_closing_tag=is_safe_closing_tag,
             slt_html=slt_html,
+            config=config,
         ):
             # block to catch inline block followed by a non-break tag
             if check_html_tags(item=item, slt_html=slt_html):
