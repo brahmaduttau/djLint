@@ -1,8 +1,9 @@
 """Djlint html linter."""
 
+from __future__ import annotations
+
 import importlib
-from pathlib import Path
-from typing import Dict, List
+from typing import TYPE_CHECKING
 
 import regex as re
 
@@ -11,7 +12,11 @@ from .helpers import (
     inside_ignored_rule,
     overlaps_ignored_block,
 )
-from .settings import Config
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from .settings import Config
 
 flags = {
     "re.A": re.A,
@@ -39,7 +44,7 @@ def build_flags(flag_list: str) -> int:
     return combined_flags
 
 
-def get_line(start: int, line_ends: List) -> str:
+def get_line(start: int, line_ends: list) -> str:
     """Get the line number and index of match."""
     line = list(filter(lambda pair: pair["end"] > start, line_ends))[0]
 
@@ -47,7 +52,7 @@ def get_line(start: int, line_ends: List) -> str:
     return "%d:%d" % (line_ends.index(line) + 1, start - line["start"])
 
 
-def linter(config: Config, html: str, filename: str, filepath: str) -> Dict:
+def linter(config: Config, html: str, filename: str, filepath: str) -> dict:
     """Lint a html string."""
     errors: dict = {filename: []}
     # build list of line ends for file
@@ -56,7 +61,7 @@ def linter(config: Config, html: str, filename: str, filepath: str) -> Dict:
         for m in re.finditer(r"(?:.*\n)|(?:[^\n]+$)", html)
     ]
 
-    ignored_rules: List[str] = []
+    ignored_rules: list[str] = []
 
     # remove ignored rules for file
     for pattern, rules in config.per_file_ignores.items():

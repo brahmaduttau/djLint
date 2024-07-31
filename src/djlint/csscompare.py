@@ -1,7 +1,6 @@
 """Module that provides functions for comparing and replacing CSS styles."""
 
 import os
-import pprint
 import re
 
 from cssutils import parseStyle
@@ -96,39 +95,9 @@ def replace_string_in_css_files(file_path, all_classes_styles):
 
 
 # Example usage
-folder_path = "./transit_odp"
-file_path1 = "djlint.css"
-file_comapare_paths = [
-    "./node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.css",
-    "./transit_odp/frontend/static/frontend/css/main.css",
-]
-for file_path2 in file_comapare_paths:
-    matching_classes = compare_css_styles(file_path1, file_path2)
-    pprint.pprint(matching_classes)
-    replace_string_in_html_files(
-        folder_path=folder_path, all_classes_styles=matching_classes
-    )
-    replace_string_in_css_files("./djlint.css", matching_classes)
-
+folder_path = "./templates"
 matching_classes = {
     "bods-ec641141e0-2": "icon-container",
-    "bods-cebde7d265-0": "content-box",
-    "bods-a80e23cc21-0": "image-frame",
-    "bods-4d03ee7d94-0": "no-border",
-    "bods-c3f6d00479-0": "indented-text",
-    "bods-d5791d24b9-0": "tall-section",
-    "bods-d19c2e34b1-0": "end-justified",
-    "bods-07725e9854-2": "large-font",
-    "bods-5e23e1f18e-0": "blue-background",
-    "bods-7f6e27f021-6": "empty-bar",
-    "bods-68ff6e3896-8": "bold-white-text",
-    "bods-5e23e1f18e-8": "blue-header",
-    "bods-7f6e27f021-14": "empty-bar",
-    "bods-68ff6e3896-16": "bold-white-text",
-    "bods-cebde7d265-2": "content-box",
-    "bods-71b0da798a-0": "top-border",
-    "bods-aa72a636bb-0": "normal-weight",
-    "bods-73cfce8020-2": "shifted-text",
 }
 replace_string_in_html_files(
     folder_path=folder_path, all_classes_styles=matching_classes

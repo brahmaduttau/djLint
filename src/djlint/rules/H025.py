@@ -1,32 +1,32 @@
 """rule H025: Check for orphans html tags."""
 
 import copy
-from typing import Any, Dict, List
+from typing import Any, dict, list
 
 import regex as re
 
-from ..helpers import (
+from djlint.helpers import (
     inside_ignored_linter_block,
     inside_ignored_rule,
     overlaps_ignored_block,
 )
-from ..lint import get_line
-from ..settings import Config
+from djlint.lint import get_line
+from djlint.settings import Config
 
 
 def run(
-    rule: Dict[str, Any],
+    rule: dict[str, Any],
     config: Config,
     html: str,
     filepath: str,
-    line_ends: List[Dict[str, int]],
+    line_ends: list[dict[str, int]],
     *args: Any,
     **kwargs: Any,
-) -> List[Dict[str, str]]:
+) -> list[dict[str, str]]:
     """Check for orphans html tags."""
-    errors: List[Dict[str, str]] = []
-    open_tags: List[re.Match] = []
-    orphan_tags: List[re.Match] = []
+    errors: list[dict[str, str]] = []
+    open_tags: list[re.Match] = []
+    orphan_tags: list[re.Match] = []
 
     for match in re.finditer(
         re.compile(

@@ -1,15 +1,18 @@
 """Build djLint console output."""
 
+from __future__ import annotations
+
 import shutil
 from collections import Counter
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any
 
 import regex as re
 from click import echo
 from colorama import Fore, Style
 
-from .settings import Config
+if TYPE_CHECKING:
+    from .settings import Config
 
 try:
     # this is used for windows + gitbash to set encoding correctly.
@@ -22,7 +25,7 @@ except BaseException:
 
 
 def print_output(
-    config: Config, file_errors: List[Dict[Any, Any]], file_count: int
+    config: Config, file_errors: list[dict[Any, Any]], file_count: int
 ) -> int:
     """Print results to console."""
     file_quantity = build_quantity(file_count)
@@ -183,7 +186,7 @@ def build_quantity_tense(size: int) -> str:
     )
 
 
-def build_stats_output(errors: List[Optional[Any]], config: Config) -> int:
+def build_stats_output(errors: list[Any | None], config: Config) -> int:
     """Build output for linter statistics."""
     if len(errors) == 0:
         return 0

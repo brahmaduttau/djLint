@@ -564,7 +564,7 @@ def process_indentation(rawcode_flat_list, indent, config) -> Any:
     Processes the indentation of the given raw code.
 
     Args:
-        rawcode_flat_list (List[str]): The list of raw code lines.
+        rawcode_flat_list (list[str]): The list of raw code lines.
         indent (str): The string used for indentation.
         config (Config): The configuration object.
 

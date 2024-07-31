@@ -1,16 +1,19 @@
 """Build src file list."""
 
+from __future__ import annotations
+
 import re
 from pathlib import Path
-from typing import List
+from typing import TYPE_CHECKING
 
 from click import echo
 from colorama import Fore
 
-from .settings import Config
+if TYPE_CHECKING:
+    from .settings import Config
 
 
-def get_src(src: List[Path], config: Config) -> List[Path]:
+def get_src(src: list[Path], config: Config) -> list[Path]:
     """Get source files."""
     paths = []
     for item in src:

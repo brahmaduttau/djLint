@@ -28,9 +28,9 @@ def formatter(config: Config, rawcode: str) -> str:
     # naturalize the line breaks
     compressed = compress_html(("\n").join(rawcode.splitlines()), config)
 
-    compressed = replace_encoded_entities(html=compressed, config=config)
+    html_entities = replace_encoded_entities(html=compressed, config=config)
 
-    expanded = expand_html(compressed, config)
+    expanded = expand_html(html_entities, config)
 
     condensed = clean_whitespace(expanded, config)
 

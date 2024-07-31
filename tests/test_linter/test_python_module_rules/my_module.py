@@ -1,26 +1,26 @@
 """Test module for custom rules."""
 
 import re
-from typing import Any, Dict, List
+from typing import Any, dict, list
 
 from djlint.lint import get_line
 from djlint.settings import Config
 
 
 def run(
-    rule: Dict[str, Any],
+    rule: dict[str, Any],
     config: Config,
     html: str,
     filepath: str,
-    line_ends: List[Dict[str, int]],
+    line_ends: list[dict[str, int]],
     *args: Any,
     **kwargs: Any,
-) -> List[Dict[str, str]]:
+) -> list[dict[str, str]]:
     """Rule that fails if if the html file contains 'bad'.
 
     In the real world, this should be done with a simple regex rule.
     """
-    errors: List[Dict[str, str]] = []
+    errors: list[dict[str, str]] = []
     for match in re.finditer(r"bad", html):
         errors.append(
             {

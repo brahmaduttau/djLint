@@ -2,7 +2,7 @@
 
 import regex as re
 
-from ..settings import Config
+from djlint.settings import Config
 
 
 def clean_single_quotes(html: str, config: Config) -> str:

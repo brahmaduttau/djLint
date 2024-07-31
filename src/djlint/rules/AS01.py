@@ -1,12 +1,14 @@
 """Validate accessibility of HTML content."""
+from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import TYPE_CHECKING, Any
 
 from bs4 import BeautifulSoup
 from joblib import Memory
 from py_w3c.validators.html.validator import HTMLValidator
 
-from djlint.settings import Config
+if TYPE_CHECKING:
+    from djlint.settings import Config
 
 location = "./cachedir"
 memory = Memory(location, verbose=0)
@@ -204,16 +206,16 @@ def check_accessibility(html: str, exclude=()):
 
 
 def run(
-    rule: Dict[str, Any],
+    rule: dict[str, Any],
     config: Config,
     html: str,
     filepath: str,
-    line_ends: List[Dict[str, int]],
+    line_ends: list[dict[str, int]],
     *args: Any,
     **kwargs: Any,
-) -> List[Dict[str, str]]:
+) -> list[dict[str, str]]:
     """Check for orphans html tags."""
-    errors: List[Dict[str, str]] = []
+    errors: list[dict[str, str]] = []
 
     acc_errors: list[AccessibilityError] = check_accessibility(html, exclude=())
     errors = []

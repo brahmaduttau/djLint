@@ -220,8 +220,7 @@ def test_python_call() -> None:
     if sys.platform != "win32":
         py_sub = subprocess.run(
             ["python", "-m", "djlint", "-h"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
         )
         print(py_sub.stdout)
         print(py_sub.returncode)
@@ -230,8 +229,7 @@ def test_python_call() -> None:
 
         py_sub = subprocess.run(
             ["python", "-m", "djlint", "__init__", "-h"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
         )
         print(py_sub.stdout)
         print(py_sub.returncode)

@@ -4,7 +4,7 @@ import hashlib
 
 import regex as re
 
-from ..settings import Config
+from djlint.settings import Config
 
 style_pattern = re.compile(r'style="([^"]*)"')
 class_pattern = re.compile(r'class="([^"]*)"')

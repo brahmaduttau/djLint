@@ -1,23 +1,28 @@
 """Djlint test config."""
 
 # pylint: disable=W0621,C0116
+from __future__ import annotations
+
 import difflib
 import os
 import re
 import shutil
 import tempfile
+from collections.abc import Generator
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Dict, Generator, List, Optional, TextIO
+from typing import TYPE_CHECKING, TextIO, dict, list
 
 import pytest
-from _pytest.reports import BaseReport
 from _pytest.terminal import TerminalReporter
 from click.testing import CliRunner
 from colorama import Fore, Style
 
 from src.djlint import main as djlint
 from src.djlint.settings import Config
+
+if TYPE_CHECKING:
+    from _pytest.reports import BaseReport
 
 
 class MyReporter(TerminalReporter):  # type: ignore
@@ -35,7 +40,7 @@ class MyReporter(TerminalReporter):  # type: ignore
     def summary_failures(self) -> None:
         """Override failure printer."""
         if self.config.option.tbstyle != "no":
-            reports: List[BaseReport] = self.getreports("failed")
+            reports: list[BaseReport] = self.getreports("failed")
             if not reports:
                 return
             self.write_sep("=", "FAILURES")
@@ -197,14 +202,11 @@ def reformat(
     write_to_file(the_file.name, the_text)
     result = runner.invoke(djlint, [the_file.name, "--profile", profile, "--reformat"])
     return SimpleNamespace(
-        **{
-            "text": Path(the_file.name).read_text(encoding="utf8"),
-            "exit_code": result.exit_code,
-        }
+        text=Path(the_file.name).read_text(encoding="utf8"), exit_code=result.exit_code
     )
 
 
-def config_builder(args: Optional[Dict] = None) -> Config:
+def config_builder(args: dict | None = None) -> Config:
     if args:
         return Config("dummy/source.html", **args)
     return Config("dummy/source.html")

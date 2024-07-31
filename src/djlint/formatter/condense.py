@@ -8,12 +8,12 @@ from functools import partial
 
 import regex as re
 
-from ..helpers import (
+from djlint.helpers import (
     inside_ignored_block,
     inside_protected_trans_block,
     is_safe_closing_tag,
 )
-from ..settings import Config
+from djlint.settings import Config
 
 
 def clean_whitespace(html: str, config: Config) -> str:

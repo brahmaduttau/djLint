@@ -7,7 +7,7 @@ import logging
 
 ## get pyproject.toml settings
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
+from typing import dict, list
 
 import yaml
 from click import echo
@@ -48,7 +48,7 @@ def load_gitignore(root: Path) -> PathSpec:
     """Search upstream for a .gitignore file."""
 
     gitignore = root / ".gitignore"
-    git_lines: List[str] = []
+    git_lines: list[str] = []
     if gitignore.is_file():
         with gitignore.open(encoding="utf-8") as this_file:
             git_lines = this_file.readlines()
@@ -61,7 +61,7 @@ def load_gitignore(root: Path) -> PathSpec:
         raise
 
 
-def find_pyproject(root: Path) -> Optional[Path]:
+def find_pyproject(root: Path) -> Path | None:
     """Search upstream for a pyproject.toml file."""
 
     pyproject = root / "pyproject.toml"
@@ -72,7 +72,7 @@ def find_pyproject(root: Path) -> Optional[Path]:
     return None
 
 
-def find_djlintrc(root: Path) -> Optional[Path]:
+def find_djlintrc(root: Path) -> Path | None:
     """Search upstream for a pyproject.toml file."""
 
     djlintrc = root / ".djlintrc"
@@ -83,7 +83,7 @@ def find_djlintrc(root: Path) -> Optional[Path]:
     return None
 
 
-def find_djlint_rules(root: Path) -> Optional[Path]:
+def find_djlint_rules(root: Path) -> Path | None:
     """Search upstream for a pyproject.toml file."""
 
     rules = root / ".djlint_rules.yaml"
@@ -94,21 +94,21 @@ def find_djlint_rules(root: Path) -> Optional[Path]:
     return None
 
 
-def load_pyproject_config(filepath: Path) -> Dict:
+def load_pyproject_config(filepath: Path) -> dict:
     """Load djlint config from pyproject.toml"""
     data = tomllib.loads(filepath.resolve().read_text(encoding="utf-8"))
     return data.get("tool", {}).get("djlint", {})
 
 
-def load_djlintrc_config(filepath: Path) -> Dict:
+def load_djlintrc_config(filepath: Path) -> dict:
     """Load djlint config from .djlintrc"""
     return json.loads(filepath.resolve().read_text(encoding="utf-8"))
 
 
-def load_project_settings(src: Path, config: Optional[str]) -> Dict:
+def load_project_settings(src: Path, config: str | None) -> dict:
     """Load djlint config from pyproject.toml."""
 
-    djlint_content: Dict = {}
+    djlint_content: dict = {}
 
     if config:
         try:
@@ -149,7 +149,7 @@ def load_project_settings(src: Path, config: Optional[str]) -> Dict:
     return djlint_content
 
 
-def validate_rules(rules: List) -> List:
+def validate_rules(rules: list) -> list:
     """Validate a list of linter rules. Returns valid rules."""
     clean_rules = []
 
@@ -176,10 +176,10 @@ def validate_rules(rules: List) -> List:
     return clean_rules
 
 
-def load_custom_rules(src: Path) -> List:
+def load_custom_rules(src: Path) -> list:
     """Load djlint config from pyproject.toml."""
 
-    djlint_content: List = []
+    djlint_content: list = []
     djlint_rules_file = find_djlint_rules(src)
 
     if djlint_rules_file:
@@ -191,7 +191,7 @@ def load_custom_rules(src: Path) -> List:
     return djlint_content
 
 
-def build_custom_blocks(custom_blocks: Union[str, None]) -> Optional[str]:
+def build_custom_blocks(custom_blocks: str | None) -> str | None:
     """Build regex string for custom template blocks."""
     if custom_blocks:
         # need to also do "end<tag>"
@@ -203,7 +203,7 @@ def build_custom_blocks(custom_blocks: Union[str, None]) -> Optional[str]:
     return None
 
 
-def build_ignore_blocks(ignore_blocks: Union[str, None]) -> Optional[str]:
+def build_ignore_blocks(ignore_blocks: str | None) -> str | None:
     """Build regex string for template blocks to not format."""
     if ignore_blocks:
         # need to also do "end<tag>"
@@ -213,7 +213,7 @@ def build_ignore_blocks(ignore_blocks: Union[str, None]) -> Optional[str]:
     return None
 
 
-def build_custom_html(custom_html: Union[str, None]) -> Optional[str]:
+def build_custom_html(custom_html: str | None) -> str | None:
     """Build regex string for custom HTML blocks."""
     if custom_html:
         return "|" + "|".join(x.strip() for x in custom_html.split(","))
@@ -226,11 +226,11 @@ class Config:
     def __init__(
         self,
         src: str,
-        ignore: Optional[str] = None,
-        extension: Optional[str] = None,
-        indent: Optional[int] = None,
+        ignore: str | None = None,
+        extension: str | None = None,
+        indent: int | None = None,
         quiet: bool = False,
-        profile: Optional[str] = None,
+        profile: str | None = None,
         require_pragma: bool = False,
         reformat: bool = False,
         check: bool = False,
@@ -241,9 +241,9 @@ class Config:
         preserve_blank_lines: bool = False,
         format_css: bool = False,
         format_js: bool = False,
-        configuration: Optional[str] = None,
+        configuration: str | None = None,
         statistics: bool = False,
-        include: Optional[str] = None,
+        include: str | None = None,
         ignore_case: bool = False,
         ignore_blocks: str = "",
         custom_blocks: str = "",
@@ -254,18 +254,18 @@ class Config:
         exclude: str = "",
         extend_exclude: str = "",
         linter_output_format: str = "",
-        max_line_length: Optional[int] = None,
-        max_attribute_length: Optional[int] = None,
+        max_line_length: int | None = None,
+        max_attribute_length: int | None = None,
         format_attribute_template_tags: bool = False,
-        per_file_ignores: Optional[List[Tuple[str, str]]] = None,
-        indent_css: Optional[int] = None,
-        indent_js: Optional[int] = None,
+        per_file_ignores: list[tuple[str, str]] | None = None,
+        indent_css: int | None = None,
+        indent_js: int | None = None,
         close_void_tags: bool = False,
         no_line_after_yaml: bool = False,
         no_function_formatting: bool = False,
         no_set_formatting: bool = False,
-        max_blank_lines: Optional[int] = None,
-        css_file_path: Optional[str] = "",
+        max_blank_lines: int | None = None,
+        css_file_path: str | None = "",
     ):
         self.reformat = reformat
         self.check = check
@@ -313,7 +313,7 @@ class Config:
             preserve_leading_space
             or djlint_settings.get("preserve_leading_space", False)
         )
-        self.ignore_blocks: Optional[str] = build_ignore_blocks(
+        self.ignore_blocks: str | None = build_ignore_blocks(
             ignore_blocks or djlint_settings.get("ignore_blocks", "")
         )
 
@@ -355,11 +355,11 @@ class Config:
         self.ignore: str = str(ignore or djlint_settings.get("ignore", ""))
         self.include: str = str(include or djlint_settings.get("include", ""))
 
-        self.files: Optional[List[str]] = djlint_settings.get("files", None)
+        self.files: list[str] | None = djlint_settings.get("files", None)
         self.stdin = False
 
         # codes to exclude
-        profile_dict: Dict[str, List[str]] = {
+        profile_dict: dict[str, list[str]] = {
             "html": ["D", "J", "T", "N", "M"],
             "django": ["J", "N", "M"],
             "jinja": ["D", "N", "M"],
@@ -369,7 +369,7 @@ class Config:
             "angular": ["D", "J", "H012", "H026", "H028"],
         }
 
-        self.profile_code: List[str] = profile_dict.get(
+        self.profile_code: list[str] = profile_dict.get(
             str(profile or djlint_settings.get("profile", "html")).lower(), []
         )
         self.profile: str = str(
@@ -468,12 +468,12 @@ class Config:
         )
 
         # add blank line after load tags
-        self.blank_line_after_tag: Optional[str] = (
+        self.blank_line_after_tag: str | None = (
             blank_line_after_tag or djlint_settings.get("blank_line_after_tag", None)
         )
 
         # add blank line before load tags
-        self.blank_line_before_tag: Optional[str] = (
+        self.blank_line_before_tag: str | None = (
             blank_line_before_tag or djlint_settings.get("blank_line_before_tag", None)
         )
 
@@ -852,7 +852,7 @@ class Config:
             | ^---[\s\S]+?---
         """
 
-        self.ignored_rules: List[str] = [
+        self.ignored_rules: list[str] = [
             # html comment
             r"<!--\s*djlint\:off(.+?)-->(?:(?!<!--\s*djlint\:on\s*-->).)*",
             # django/jinja/nunjucks
